@@ -1,7 +1,6 @@
 # Estadía — Sistema Hotel
 
-Sistema web de check-in / check-out para hoteles, desarrollado con Spring Boot. Proyecto
-de la materia Administración de Proyectos de Software.
+web de check-in / check-out para hoteles,
 
 ## ¿Qué hace?
 
