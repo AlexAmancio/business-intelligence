@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head th:replace="~{header-fragment :: headertag(title='Reserva múltiple')}">
+</head>
+<body>
+<div th:replace="~{navegacion :: menu}"></div>
+<div class="content">
+    <form th:action="@{/reservas/guardar/}" method="post">
+        <div class="header-form">
+            <h1>Reserva múltiple</h1>
+        </div>
+        <div class="content-form">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+            <div class="group-field">
+                <label for="cliente">Cliente</label>
+                <select id="cliente" name="cliente">
+                    <option th:each="cliente : ${listaClientes}" th:value="${cliente.id}" th:text="${cliente.nombres + ' ' + cliente.apellidos}"></option>
+                </select>
+            </div>
+            <div class="group-field">
+                <label for="checkIn">Fecha de ingreso:</label>
+                <input id="checkIn" name="checkIn" type="datetime-local" required/>
+            </div>
+            <div class="group-field">
+                <label for="salida">Fecha de salida:</label>
+                <input id="salida" type="datetime-local" required/>
+            </div>
+            <div class="group-field">
+                <label for="noches">N° Noches (calculado):</label>
+                <input id="noches" name="noches" type="number" readonly placeholder="—"/>
+            </div>
+            <p id="fechas-warning" class="hidden" style="color: var(--color-rojo); margin: -8px 0 12px 250px;">
+                La fecha de salida tiene que ser después del ingreso.
+            </p>
+
+            <div id="habitaciones-group" class="hidden" style="margin: 20px 0;">
+                <label style="display:block; margin-bottom: 10px;">Elegí las habitaciones (podés marcar varias) e indicá cuántos huéspedes va en cada una</label>
+                <div id="habitaciones-lista" style="display:flex; flex-direction:column; row-gap: 10px;"></div>
+            </div>
+
+            <div id="resumen-vivo" class="resumen-vivo hidden" style="margin: 0 0 20px 0;">
+                <p id="resumen-calculo"></p>
+            </div>
+
+        </div>
+        <div class="actions-form">
+            <button type="submit">
+                <span>Crear reserva</span>
+            </button>
+            <button id="btn-close"><span>Cancelar</span></button>
+        </div>
+    </form>
+</div>
+<script th:src="@{/js/script.js}"></script>
+<script th:src="@{/js/script-forms.js}"></script>
+<script>
+    let busquedaTimeout = null;
+
+    function formatearSoles(numero) {
+        return numero.toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function calcularNoches() {
+        const checkInVal = document.getElementById('checkIn').value;
+        const salidaVal = document.getElementById('salida').value;
+        const nochesInput = document.getElementById('noches');
+        const warning = document.getElementById('fechas-warning');
+
+        if (!checkInVal || !salidaVal) {
+            nochesInput.value = '';
+            return 0;
+        }
+
+        const checkIn = new Date(checkInVal);
+        const salida = new Date(salidaVal);
+        const noches = Math.round((salida - checkIn) / (1000 * 60 * 60 * 24));
+
+        if (noches < 1) {
+            nochesInput.value = '';
+            warning.classList.remove('hidden');
+            return 0;
+        }
+
+        warning.classList.add('hidden');
+        nochesInput.value = noches;
+        return noches;
+    }
+
+    function actualizarResumen() {
+        const seleccionadas = document.querySelectorAll('input[name="habitaciones"]:checked');
+        const resumen = document.getElementById('resumen-vivo');
+        const calculo = document.getElementById('resumen-calculo');
+        const noches = parseInt(document.getElementById('noches').value, 10) || 0;
+
+        if (seleccionadas.length === 0) {
+            resumen.classList.add('hidden');
+            return;
+        }
+        resumen.classList.remove('hidden');
+
+        let total = 0;
+        seleccionadas.forEach(cb => {
+            total += parseFloat(cb.dataset.tarifa) || 0;
+        });
+
+        const nHab = seleccionadas.length;
+        calculo.textContent =
+            `${nHab} habitación${nHab === 1 ? '' : 'es'} seleccionada${nHab === 1 ? '' : 's'} · ` +
+            `${noches} noche${noches === 1 ? '' : 's'} · Total: S/. ${formatearSoles(total)}`;
+    }
+
+    function buscarHabitacionesDisponibles() {
+        const checkIn = document.getElementById('checkIn').value;
+        const noches = calcularNoches();
+
+        if (!checkIn || noches < 1) {
+            document.getElementById('habitaciones-group').classList.add('hidden');
+            document.getElementById('resumen-vivo').classList.add('hidden');
+            return;
+        }
+
+        fetch(`/habitaciones/disponibles?checkIn=${checkIn}&noches=${noches}`)
+            .then(response => response.json())
+            .then(data => {
+                const contenedor = document.getElementById('habitaciones-lista');
+                contenedor.innerHTML = "";
+
+                data.forEach(habitacion => {
+                    const row = document.createElement('div');
+                    row.className = 'reserva-habitacion-row';
+
+                    const infoLabel = document.createElement('label');
+                    infoLabel.className = 'reserva-habitacion-info';
+
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.name = 'habitaciones';
+                    checkbox.value = habitacion.id;
+                    checkbox.dataset.aforo = habitacion.aforo;
+
+                    const texto = document.createElement('span');
+                    texto.textContent = `Habitación ${habitacion.numero} (aforo ${habitacion.aforo})`;
+
+                    const precio = document.createElement('span');
+                    precio.className = 'reserva-habitacion-precio';
+                    precio.textContent = 'S/. --';
+
+                    infoLabel.append(checkbox, texto, precio);
+
+                    const huespedesWrap = document.createElement('div');
+                    huespedesWrap.className = 'reserva-habitacion-huespedes hidden';
+
+                    const huespedesLabel = document.createElement('label');
+                    huespedesLabel.textContent = 'Huéspedes en esta habitación:';
+                    huespedesLabel.setAttribute('for', `huespedes-${habitacion.id}`);
+
+                    const huespedesInput = document.createElement('input');
+                    huespedesInput.type = 'number';
+                    huespedesInput.name = `huespedes_${habitacion.id}`;
+                    huespedesInput.id = `huespedes-${habitacion.id}`;
+                    huespedesInput.min = '1';
+                    huespedesInput.max = String(habitacion.aforo);
+                    huespedesInput.value = '1';
+
+                    const aforoWarning = document.createElement('span');
+                    aforoWarning.className = 'reserva-aforo-warning hidden';
+                    aforoWarning.textContent = 'Supera el aforo de esta habitación.';
+
+                    huespedesWrap.append(huespedesLabel, huespedesInput, aforoWarning);
+
+                    row.append(infoLabel, huespedesWrap);
+                    contenedor.appendChild(row);
+
+                    checkbox.addEventListener('change', () => {
+                        huespedesWrap.classList.toggle('hidden', !checkbox.checked);
+                        actualizarResumen();
+                    });
+                    huespedesInput.addEventListener('input', () => {
+                        const aforo = parseInt(checkbox.dataset.aforo, 10);
+                        const val = parseInt(huespedesInput.value, 10);
+                        aforoWarning.classList.toggle('hidden', !(val > aforo));
+                        actualizarResumen();
+                    });
+
+                    fetch(`/habitaciones/calcular-tarifa/${habitacion.id}?noches=${noches}&checkIn=${encodeURIComponent(checkIn)}`)
+                        .then(r => r.json())
+                        .then(tarifaTotal => {
+                            checkbox.dataset.tarifa = tarifaTotal;
+                            precio.textContent = `S/. ${formatearSoles(tarifaTotal)}`;
+                            actualizarResumen();
+                        })
+                        .catch(error => console.error('Error al calcular tarifa:', error));
+                });
+
+                document.getElementById('habitaciones-group').classList.remove('hidden');
+                actualizarResumen();
+            })
+            .catch(error => console.error('Error al obtener las habitaciones disponibles:', error));
+    }
+
+    function programarBusquedaAutomatica() {
+        clearTimeout(busquedaTimeout);
+        busquedaTimeout = setTimeout(buscarHabitacionesDisponibles, 400);
+    }
+
+    document.getElementById('checkIn').addEventListener('input', programarBusquedaAutomatica);
+    document.getElementById('salida').addEventListener('input', programarBusquedaAutomatica);
+</script>
+</body>
+</html>

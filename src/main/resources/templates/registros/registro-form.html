@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="es">
+<head th:replace="~{header-fragment :: headertag(title=${titulo})}">
+</head>
+<body>
+<div th:replace="~{navegacion :: menu}"></div>
+<div class="content">
+    <form th:action="@{/guardar/}" method="post" th:object="${registro}">
+        <div class="header-form">
+            <h1 th:text="${titulo}"></h1>
+        </div>
+        <div class="content-form">
+            <input th:field="*{id}" type="hidden" />
+            <input th:field="*{version}" type="hidden" />
+            <div class="group-field">
+                <label for="cliente">Cliente</label>
+                <select th:field="*{cliente}">
+                    <option th:each="cliente : ${listaClientes}" th:value="${cliente.id}" th:text="${cliente.nombres + ' ' + cliente.apellidos}"></option>
+                </select>
+            </div>
+            <div class="group-field">
+                <label for="checkIn">Fecha de ingreso:</label>
+                <input id="checkIn" th:field="*{checkIn}" type="datetime-local" required/>
+            </div>
+            <div class="group-field">
+                <label for="salida">Fecha de salida:</label>
+                <input id="salida" type="datetime-local" required/>
+            </div>
+            <div class="group-field">
+                <label for="noches">N° Noches (calculado):</label>
+                <input id="noches" th:field="*{noches}" type="number" readonly placeholder="—"/>
+            </div>
+            <p id="fechas-warning" class="hidden" style="color: var(--color-rojo); margin: -8px 0 12px 250px;">
+                La fecha de salida tiene que ser después del ingreso.
+            </p>
+            <div class="group-field hidden" id="habitacion-group">
+                <label for="habitacion">Habitación</label>
+                <select id="habitacion" th:field="*{habitacion}">
+                    <option th:each="habitacion : ${listaHabitaciones}" th:value="${habitacion.id}" th:attr="data-aforo=${habitacion.aforo}" th:text="${'Habitación ' + habitacion.numero + ' (aforo ' + habitacion.aforo + ')'}"></option>
+                </select>
+            </div>
+            <div class="group-field">
+                <label for="tarifaMostrada">Tarifa (en soles):</label>
+                <input id="tarifaMostrada" type="text" readonly placeholder="—"/>
+                <input id="tarifaCalculada" th:field="*{tarifa}" type="hidden"/>
+            </div>
+            <div class="group-field">
+                <label for="numHuespedes">N° Huéspedes:</label>
+                <input id="numHuespedes" th:field="*{numHuespedes}" type="number" min="1"/>
+            </div>
+            <p id="aforo-warning" class="hidden" style="color: var(--color-rojo); margin: -8px 0 12px 250px;">
+                Supera el aforo máximo de la habitación seleccionada.
+            </p>
+            <div class="group-field">
+                <label for="observaciones">Observaciones:</label>
+                <input th:field="*{observaciones}" type="text"/>
+            </div>
+            <div class="group-field">
+                <label for="metodoPago">Método de pago</label>
+                <select th:field="*{metodoPago}">
+                    <option value="EFECTIVO">Efectivo</option>
+                    <option value="TARJETA">Tarjeta</option>
+                    <option value="TRANSFERENCIA">Transferencia</option>
+                    <option value="">— Sin definir —</option>
+                </select>
+            </div>
+            <div class="group-field">
+                <label for="montoPagado">Monto pagado (S/.)</label>
+                <input id="montoPagado" th:field="*{montoPagado}" type="number" min="0" step="0.1"/>
+            </div>
+            <div id="resumen-vivo" class="resumen-vivo hidden">
+                <p id="resumen-calculo"></p>
+                <p id="resumen-saldo"></p>
+            </div>
+            <div class="group-field" th:if="${registro.usuario != null}">
+                <label>Registrado por</label>
+                <input type="text" readonly th:value="${registro.usuario.nombres + ' ' + registro.usuario.apellidos}"/>
+            </div>
+            <input th:if="${registro.usuario != null}" th:field="*{usuario}" type="hidden"/>
+            <div class="actions-form">
+                <button type="submit">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                                d="M10.9091 1.53409C10.9091 1.30805 10.8193 1.09128 10.6595 0.931443C10.4996 0.771611 10.2829 0.681818 10.0568 0.681818C9.83079 0.681818 9.61401 0.771611 9.45418 0.931443C9.29434 1.09128 9.20455 1.30805 9.20455 1.53409V9.20455H1.5341C1.30806 9.20455 1.09128 9.29434 0.931449 9.45417C0.771617 9.614 0.681824 9.83078 0.681824 10.0568C0.681824 10.2829 0.771617 10.4996 0.931449 10.6595C1.09128 10.8193 1.30806 10.9091 1.5341 10.9091H9.20455V18.5795C9.20455 18.8056 9.29434 19.0224 9.45418 19.1822C9.61401 19.342 9.83079 19.4318 10.0568 19.4318C10.2829 19.4318 10.4996 19.342 10.6595 19.1822C10.8193 19.0224 10.9091 18.8056 10.9091 18.5795V10.9091H18.5796C18.8056 10.9091 19.0224 10.8193 19.1822 10.6595C19.342 10.4996 19.4318 10.2829 19.4318 10.0568C19.4318 9.83078 19.342 9.614 19.1822 9.45417C19.0224 9.29434 18.8056 9.20455 18.5796 9.20455H10.9091V1.53409Z"
+                                fill="black"/>
+                    </svg>
+                    <span th:text="${txtboton}"></span>
+                </button>
+                <button id="btn-close"><span>Cancelar</span></button>
+            </div>
+        </div>
+    </form>
+</div>
+<script th:src="@{/js/script.js}"></script>
+<script th:src="@{/js/script-forms.js}"></script>
+<script>
+    // Las noches ya no se escriben a mano: se calculan solas a partir de
+    // ingreso/salida. El campo #noches sigue existiendo (readonly) porque
+    // el backend sigue guardando un número de noches, sin cambios ahí.
+    let busquedaTimeout = null;
+
+    function calcularNoches() {
+        const checkInVal = document.getElementById('checkIn').value;
+        const salidaVal = document.getElementById('salida').value;
+        const nochesInput = document.getElementById('noches');
+        const warning = document.getElementById('fechas-warning');
+
+        if (!checkInVal || !salidaVal) {
+            nochesInput.value = '';
+            return 0;
+        }
+
+        const checkIn = new Date(checkInVal);
+        const salida = new Date(salidaVal);
+        const noches = Math.round((salida - checkIn) / (1000 * 60 * 60 * 24));
+
+        if (noches < 1) {
+            nochesInput.value = '';
+            warning.classList.remove('hidden');
+            return 0;
+        }
+
+        warning.classList.add('hidden');
+        nochesInput.value = noches;
+        return noches;
+    }
+
+    function buscarHabitacionesDisponibles() {
+        const checkIn = document.getElementById('checkIn').value;
+        const noches = calcularNoches();
+
+        if (!checkIn || noches < 1) {
+            return;
+        }
+
+        fetch(`/habitaciones/disponibles?checkIn=${checkIn}&noches=${noches}`)
+            .then(response => response.json())
+            .then(data => {
+                const habitacionSelect = document.querySelector('select[name="habitacion"]');
+                habitacionSelect.innerHTML = "";
+
+                data.forEach(habitacion => {
+                    const option = document.createElement("option");
+                    option.value = habitacion.id;
+                    option.dataset.aforo = habitacion.aforo;
+                    option.textContent = `Habitación ${habitacion.numero} (aforo ${habitacion.aforo})`;
+                    habitacionSelect.appendChild(option);
+                });
+
+                document.getElementById('habitacion-group').classList.remove('hidden');
+                verificarAforo();
+                calcularTarifaAutomatica();
+            })
+            .catch(error => console.error('Error al obtener las habitaciones disponibles:', error));
+    }
+
+    function formatearSoles(numero) {
+        return numero.toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function mostrarTarifa(valor) {
+        const tarifa = parseFloat(valor) || 0;
+        document.getElementById('tarifaCalculada').value = tarifa;
+        document.getElementById('tarifaMostrada').value = tarifa > 0 ? `S/. ${formatearSoles(tarifa)}` : '';
+    }
+
+    function calcularTarifaAutomatica() {
+        const habitacionSelect = document.getElementById('habitacion');
+        const habitacionID = habitacionSelect.value;
+        const noches = document.getElementById('noches').value;
+        const checkIn = document.getElementById('checkIn').value;
+
+        if (!habitacionID || !noches) {
+            return;
+        }
+
+        fetch(`/habitaciones/calcular-tarifa/${habitacionID}?noches=${noches}&checkIn=${encodeURIComponent(checkIn)}`)
+            .then(response => response.json())
+            .then(data => {
+                mostrarTarifa(data);
+                actualizarResumen();
+            })
+            .catch(error => console.error('Error al calcular tarifa:', error));
+    }
+
+    function actualizarResumen() {
+        const noches = parseInt(document.getElementById('noches').value, 10) || 0;
+        const tarifa = parseFloat(document.getElementById('tarifaCalculada').value) || 0;
+        const pagado = parseFloat(document.getElementById('montoPagado').value) || 0;
+        const resumen = document.getElementById('resumen-vivo');
+        const calculo = document.getElementById('resumen-calculo');
+        const saldoEl = document.getElementById('resumen-saldo');
+
+        if (noches < 1 || tarifa <= 0) {
+            resumen.classList.add('hidden');
+            return;
+        }
+        resumen.classList.remove('hidden');
+
+        const precioPorNoche = tarifa / noches;
+        let texto = `${noches} noche${noches === 1 ? '' : 's'} × S/. ${formatearSoles(precioPorNoche)} = S/. ${formatearSoles(tarifa)}`;
+        calculo.textContent = texto;
+
+        const saldo = tarifa - pagado;
+        if (saldo > 0) {
+            saldoEl.textContent = `Saldo pendiente: S/. ${formatearSoles(saldo)}`;
+            saldoEl.className = 'saldo-pendiente';
+        } else {
+            saldoEl.textContent = 'Pagado completo';
+            saldoEl.className = 'saldo-cero';
+        }
+    }
+
+    function verificarAforo() {
+        const habitacionSelect = document.getElementById('habitacion');
+        const numHuespedesInput = document.getElementById('numHuespedes');
+        const warning = document.getElementById('aforo-warning');
+
+        const opcionSeleccionada = habitacionSelect.options[habitacionSelect.selectedIndex];
+        const aforo = opcionSeleccionada ? parseInt(opcionSeleccionada.dataset.aforo, 10) : null;
+        const huespedes = parseInt(numHuespedesInput.value, 10);
+
+        if (aforo && huespedes > aforo) {
+            warning.classList.remove('hidden');
+        } else {
+            warning.classList.add('hidden');
+        }
+    }
+
+    // Búsqueda automática (con una pequeña espera) apenas las dos fechas son
+    // válidas.
+    function programarBusquedaAutomatica() {
+        clearTimeout(busquedaTimeout);
+        busquedaTimeout = setTimeout(buscarHabitacionesDisponibles, 400);
+    }
+
+    document.getElementById('checkIn').addEventListener('input', programarBusquedaAutomatica);
+    document.getElementById('salida').addEventListener('input', programarBusquedaAutomatica);
+
+    document.getElementById('numHuespedes').addEventListener('input', verificarAforo);
+    document.getElementById('habitacion').addEventListener('change', function () {
+        verificarAforo();
+        calcularTarifaAutomatica();
+    });
+    document.getElementById('montoPagado').addEventListener('input', actualizarResumen);
+
+    // Si estamos editando un registro existente: precargar la fecha de
+    // salida a partir de checkIn + noches, y mostrar la tarifa/resumen ya
+    // guardados con el mismo formato que usaría la búsqueda automática.
+    // Si es un registro NUEVO, el campo noches viene en "0" (int por
+    // defecto en el backend) sin que el usuario haya elegido nada todavía:
+    // se limpia para no mostrar un cero engañoso.
+    (function precargarEstadoInicial() {
+        const checkInVal = document.getElementById('checkIn').value;
+        const nochesInput = document.getElementById('noches');
+        const nochesVal = nochesInput.value;
+
+        if (checkInVal && nochesVal && nochesVal !== '0') {
+            const checkIn = new Date(checkInVal);
+            checkIn.setDate(checkIn.getDate() + parseInt(nochesVal, 10));
+            const pad = n => String(n).padStart(2, '0');
+            const salidaStr = `${checkIn.getFullYear()}-${pad(checkIn.getMonth() + 1)}-${pad(checkIn.getDate())}T${pad(checkIn.getHours())}:${pad(checkIn.getMinutes())}`;
+            document.getElementById('salida').value = salidaStr;
+
+            mostrarTarifa(document.getElementById('tarifaCalculada').value);
+            actualizarResumen();
+        } else {
+            nochesInput.value = '';
+        }
+    })();
+</script>
+</body>
+</html>
