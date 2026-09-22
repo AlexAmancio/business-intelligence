@@ -61,3 +61,23 @@ Requiere una base MySQL accesible desde el contenedor (ajustá
 ```bash
 ./mvnw test
 ```
+
+## Proyecto de Business Intelligence y Big Data
+
+Sobre este mismo sistema se construyó el proyecto final del curso Base de Datos
+Avanzadas y Big Data (Grupo 4), que analiza por qué los huéspedes no llegan a
+completar su estadía (no-show y cancelación).
+
+- `informe/informe_final.docx` — informe oficial (capítulos I a III).
+- `bi/datamart_estadia.sql` — ETL y datamart en esquema estrella (`hotel_dw`) sobre
+  los datos reales de `alquiler`.
+- `bi/arquitectura.png` — diagrama de la arquitectura integrada.
+- `bigdata/generar_dataset_sintetico.py` — genera un dataset sintético a escala
+  (3,000,000 de filas), calibrado con las proporciones reales.
+- `bigdata/analisis_pyspark.py` — procesa el dataset sintético con PySpark
+  (local[*]) y corre un benchmark de escalabilidad por número de particiones.
+- `bigdata/resultados_pyspark.json` — resultados de la última ejecución.
+
+Para reproducir la parte Big Data: `python3 bigdata/generar_dataset_sintetico.py`
+seguido de `python3 bigdata/analisis_pyspark.py` (requiere PySpark y Java 17). El
+CSV generado no se versiona por su tamaño (~290 MB).

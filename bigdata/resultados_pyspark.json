@@ -1,0 +1,104 @@
+{
+  "total_filas": 3000000,
+  "nucleos_spark": 6,
+  "por_categoria": [
+    {
+      "categoria": "Habitación Deluxe",
+      "total": 898958,
+      "no_shows": 163131,
+      "canceladas": 73757,
+      "pct_no_llega": 26.35
+    },
+    {
+      "categoria": "Suite Junior",
+      "total": 450794,
+      "no_shows": 63378,
+      "canceladas": 37085,
+      "pct_no_llega": 22.29
+    },
+    {
+      "categoria": "Habitación Estándar",
+      "total": 1650248,
+      "no_shows": 166557,
+      "canceladas": 135475,
+      "pct_no_llega": 18.3
+    }
+  ],
+  "por_dia_semana": [
+    {
+      "dia_semana": "Friday",
+      "total": 426712,
+      "pct_no_llega": 32.94
+    },
+    {
+      "dia_semana": "Monday",
+      "total": 430779,
+      "pct_no_llega": 30.74
+    },
+    {
+      "dia_semana": "Thursday",
+      "total": 429514,
+      "pct_no_llega": 19.76
+    },
+    {
+      "dia_semana": "Sunday",
+      "total": 426583,
+      "pct_no_llega": 19.71
+    },
+    {
+      "dia_semana": "Tuesday",
+      "total": 428948,
+      "pct_no_llega": 17.57
+    },
+    {
+      "dia_semana": "Wednesday",
+      "total": 430127,
+      "pct_no_llega": 15.34
+    },
+    {
+      "dia_semana": "Saturday",
+      "total": 427337,
+      "pct_no_llega": 13.12
+    }
+  ],
+  "por_anticipacion": [
+    {
+      "franja_anticipacion": "mas de 10 dias",
+      "total": 604671,
+      "pct_no_llega": 25.68
+    },
+    {
+      "franja_anticipacion": "menos de 6h",
+      "total": 374759,
+      "pct_no_llega": 23.41
+    },
+    {
+      "franja_anticipacion": "2 a 10 dias",
+      "total": 1065245,
+      "pct_no_llega": 19.64
+    },
+    {
+      "franja_anticipacion": "6h a 48h",
+      "total": 955325,
+      "pct_no_llega": 19.58
+    }
+  ],
+  "benchmark_particiones": [
+    {
+      "particiones": 1,
+      "segundos": 1.214
+    },
+    {
+      "particiones": 4,
+      "segundos": 1.712
+    },
+    {
+      "particiones": 8,
+      "segundos": 0.953
+    },
+    {
+      "particiones": 6,
+      "segundos": 0.711
+    }
+  ]
+}

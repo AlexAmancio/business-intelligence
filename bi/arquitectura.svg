@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" font-family="Arial, sans-serif">
+  <rect width="1200" height="620" fill="white"/>
+
+  <text x="600" y="30" text-anchor="middle" font-size="20" font-weight="bold" fill="#0B2545">
+    Arquitectura integrada — Análisis de churn de huéspedes (Hotel Tunki)
+  </text>
+
+  <!-- Fuente OLTP -->
+  <rect x="40" y="80" width="200" height="90" rx="8" fill="#E8EEF5" stroke="#0B2545" stroke-width="2"/>
+  <text x="140" y="115" text-anchor="middle" font-size="15" font-weight="bold" fill="#0B2545">Sistema Estadía</text>
+  <text x="140" y="135" text-anchor="middle" font-size="13" fill="#333">MySQL "alquiler"</text>
+  <text x="140" y="153" text-anchor="middle" font-size="13" fill="#333">(fuente OLTP real)</text>
+
+  <!-- Arrow down to ETL BI -->
+  <line x1="140" y1="170" x2="140" y2="230" stroke="#0B2545" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- ETL SQL -->
+  <rect x="40" y="230" width="200" height="80" rx="8" fill="#E8F5EC" stroke="#1A7A3C" stroke-width="2"/>
+  <text x="140" y="262" text-anchor="middle" font-size="14" font-weight="bold" fill="#1A7A3C">ETL en SQL</text>
+  <text x="140" y="280" text-anchor="middle" font-size="12" fill="#333">bi/datamart_estadia.sql</text>
+  <text x="140" y="296" text-anchor="middle" font-size="12" fill="#333">(Extract-Transform-Load)</text>
+
+  <line x1="140" y1="310" x2="140" y2="370" stroke="#0B2545" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Datamart -->
+  <rect x="40" y="370" width="200" height="90" rx="8" fill="#EFEAFB" stroke="#5B2E9E" stroke-width="2"/>
+  <text x="140" y="402" text-anchor="middle" font-size="14" font-weight="bold" fill="#5B2E9E">Datamart BI</text>
+  <text x="140" y="420" text-anchor="middle" font-size="12" fill="#333">hotel_dw</text>
+  <text x="140" y="436" text-anchor="middle" font-size="12" fill="#333">esquema estrella</text>
+  <text x="140" y="452" text-anchor="middle" font-size="12" fill="#333">(fact_estadia + dims)</text>
+
+  <line x1="140" y1="460" x2="140" y2="520" stroke="#0B2545" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="40" y="520" width="200" height="70" rx="8" fill="#FDEFE0" stroke="#B5651D" stroke-width="2"/>
+  <text x="140" y="550" text-anchor="middle" font-size="14" font-weight="bold" fill="#B5651D">Consultas OLAP</text>
+  <text x="140" y="568" text-anchor="middle" font-size="12" fill="#333">SQL sobre hotel_dw</text>
+
+  <!-- Segunda ruta: dataset sintetico -->
+  <line x1="240" y1="125" x2="440" y2="125" stroke="#0B2545" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="340" y="112" text-anchor="middle" font-size="11" fill="#555">proporciones reales</text>
+
+  <rect x="440" y="80" width="220" height="90" rx="8" fill="#E8EEF5" stroke="#0B2545" stroke-width="2"/>
+  <text x="550" y="112" text-anchor="middle" font-size="15" font-weight="bold" fill="#0B2545">Generador sintético</text>
+  <text x="550" y="132" text-anchor="middle" font-size="12" fill="#333">generar_dataset_sintetico.py</text>
+  <text x="550" y="150" text-anchor="middle" font-size="12" fill="#333">3,000,000 filas calibradas</text>
+
+  <line x1="550" y1="170" x2="550" y2="230" stroke="#0B2545" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="440" y="230" width="220" height="90" rx="8" fill="#FBE9EC" stroke="#B0233A" stroke-width="2"/>
+  <text x="550" y="262" text-anchor="middle" font-size="14" font-weight="bold" fill="#B0233A">PySpark local[*]</text>
+  <text x="550" y="280" text-anchor="middle" font-size="12" fill="#333">analisis_pyspark.py</text>
+  <text x="550" y="296" text-anchor="middle" font-size="12" fill="#333">6 núcleos, DataFrame API</text>
+  <text x="550" y="312" text-anchor="middle" font-size="12" fill="#333">Solución Big Data</text>
+
+  <line x1="550" y1="320" x2="550" y2="380" stroke="#0B2545" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="440" y="380" width="220" height="90" rx="8" fill="#FDEFE0" stroke="#B5651D" stroke-width="2"/>
+  <text x="550" y="412" text-anchor="middle" font-size="14" font-weight="bold" fill="#B5651D">Indicadores a escala</text>
+  <text x="550" y="430" text-anchor="middle" font-size="12" fill="#333">resultados_pyspark.json</text>
+  <text x="550" y="446" text-anchor="middle" font-size="12" fill="#333">+ benchmark de particiones</text>
+
+  <!-- Convergencia -->
+  <line x1="240" y1="555" x2="820" y2="555" stroke="#0B2545" stroke-width="2" stroke-dasharray="2,3"/>
+  <line x1="550" y1="470" x2="550" y2="555" stroke="#0B2545" stroke-width="2"/>
+  <line x1="820" y1="555" x2="820" y2="330" stroke="#0B2545" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="700" y="230" width="240" height="100" rx="8" fill="#EAF6F6" stroke="#0E7C7B" stroke-width="2"/>
+  <text x="820" y="262" text-anchor="middle" font-size="15" font-weight="bold" fill="#0E7C7B">Comparación de resultados</text>
+  <text x="820" y="282" text-anchor="middle" font-size="12" fill="#333">Tasa de no-llegada por</text>
+  <text x="820" y="298" text-anchor="middle" font-size="12" fill="#333">categoría, día y anticipación</text>
+  <text x="820" y="314" text-anchor="middle" font-size="12" fill="#333">(BI real vs Big Data sintético)</text>
+
+  <!-- Leyenda limite -->
+  <rect x="30" y="200" width="250" height="380" fill="none" stroke="#999" stroke-width="1" stroke-dasharray="4,4"/>
+  <text x="60" y="600" font-size="11" fill="#555">Solución BI (MySQL)</text>
+
+  <rect x="430" y="200" width="250" height="290" fill="none" stroke="#999" stroke-width="1" stroke-dasharray="4,4"/>
+  <text x="450" y="600" font-size="11" fill="#555">Solución Big Data (Spark)</text>
+
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#0B2545"/>
+    </marker>
+  </defs>
+</svg>

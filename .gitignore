@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Dataset sintetico a escala (regenerable, ~290MB)
+bigdata/estadias_sinteticas.csv
+informe/work/
