@@ -135,6 +135,23 @@ FROM alquiler.registro r;
 -- CONSULTAS OLAP DE EJEMPLO (responden la pregunta de negocio)
 -- =====================================================================
 
+-- Concurrencia de clientes y tasa de no-llegada por mes (tendencia).
+-- Con solo 21 registros reales, la muestra cubre pocos meses y no alcanza
+-- para ver una tendencia real; por eso el proyecto usa el dataset
+-- sintetico (bigdata/) para medir la caida de concurrencia a lo largo de
+-- un periodo de 3 anios. Esta consulta queda lista para cuando el sistema
+-- acumule mas historial.
+SELECT
+    t.anio,
+    t.mes,
+    COUNT(*) AS estadias,
+    SUM(f.es_no_show + f.es_cancelada) AS no_llegaron,
+    ROUND(100 * SUM(f.es_no_show + f.es_cancelada) / COUNT(*), 1) AS pct_no_llega
+FROM fact_estadia f
+JOIN dim_tiempo t ON f.id_tiempo_checkin = t.id_tiempo
+GROUP BY t.anio, t.mes
+ORDER BY t.anio, t.mes;
+
 -- Tasa de no-show / cancelacion por categoria de habitacion
 SELECT
     cat.nombre AS categoria,

@@ -5,6 +5,13 @@ FINALIZADA 47.6%, ACTIVA 38.1%, CANCELADA 9.5%, NO_SHOW 4.8%; y con la
 diferencia por dia de semana y categoria de habitacion que se ve en el
 datamart (mas cancelaciones los viernes/lunes, mas no-shows en Deluxe).
 
+Ademas, y esto es el eje del problema de negocio del proyecto, el dataset
+codifica una caida real de la concurrencia de clientes en el tiempo: hay
+menos estadias por mes segun avanza el periodo 2024-2026 (menor volumen de
+llegadas), y la probabilidad de no-show/cancelacion tambien sube con el
+tiempo. No es ruido: es la tendencia que el analisis debe encontrar y
+explicar, igual que el ejemplo de "Retiro de Alumnos" de la clase.
+
 El objetivo no es replicar el numero exacto, sino generar un dataset con
 volumen real (millones de filas) que conserve senal (no ruido puro) para
 que el analisis de churn en PySpark tenga algo que encontrar.
@@ -40,10 +47,22 @@ PAISES = ["Perú", "Chile", "Colombia", "Ecuador", "Argentina", "México", "Espa
 OCUPACIONES = ["Ingeniero", "Comerciante", "Docente", "Estudiante", "Médico", "Abogado", "Turista", "Freelancer"]
 
 
+def elegir_dias_offset():
+    """Muestrea la fecha con densidad decreciente en el tiempo: cada vez
+    llegan menos estadias segun avanza el periodo (caida de concurrencia)."""
+    while True:
+        t = random.randint(0, DIAS_RANGO)
+        progreso = t / DIAS_RANGO
+        peso = 1.0 - 0.55 * progreso  # de 1.0 al inicio a 0.45 al final
+        if random.random() < peso:
+            return t
+
+
 def generar_fila(i):
     categoria, precio, no_show_base = random.choices(CATEGORIAS, weights=PESOS_CATEGORIA, k=1)[0]
 
-    dias_offset = random.randint(0, DIAS_RANGO)
+    dias_offset = elegir_dias_offset()
+    progreso_tiempo = dias_offset / DIAS_RANGO  # 0 al inicio del periodo, 1 al final
     fecha_checkin = FECHA_INICIO + datetime.timedelta(days=dias_offset)
     dia_semana = DIAS[fecha_checkin.weekday()]
     hora = random.randint(12, 20)
@@ -56,8 +75,9 @@ def generar_fila(i):
         weights=[15, 30, 35, 20],
     )[0]
 
-    p_no_show = no_show_base * FACTOR_DIA[dia_semana] * (1.3 if anticipacion_horas < 6 else 1.0)
-    p_cancelada = 0.09 * FACTOR_DIA[dia_semana] * (1.5 if anticipacion_horas > 240 else 0.8)
+    factor_tendencia = 1.0 + 0.9 * progreso_tiempo  # la no-llegada empeora con el tiempo
+    p_no_show = no_show_base * FACTOR_DIA[dia_semana] * (1.3 if anticipacion_horas < 6 else 1.0) * factor_tendencia
+    p_cancelada = 0.09 * FACTOR_DIA[dia_semana] * (1.5 if anticipacion_horas > 240 else 0.8) * factor_tendencia
 
     r = random.random()
     if r < p_no_show:
@@ -75,6 +95,7 @@ def generar_fila(i):
         "id_registro": i,
         "categoria": categoria,
         "fecha_checkin": fecha_checkin.isoformat(),
+        "anio_mes": fecha_checkin.strftime("%Y-%m"),
         "hora_checkin": hora,
         "dia_semana": dia_semana,
         "noches": noches,

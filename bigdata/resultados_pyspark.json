@@ -4,101 +4,320 @@
   "por_categoria": [
     {
       "categoria": "Habitación Deluxe",
-      "total": 898958,
-      "no_shows": 163131,
-      "canceladas": 73757,
-      "pct_no_llega": 26.35
+      "total": 901203,
+      "no_shows": 227933,
+      "canceladas": 103218,
+      "pct_no_llega": 36.75
     },
     {
       "categoria": "Suite Junior",
-      "total": 450794,
-      "no_shows": 63378,
-      "canceladas": 37085,
-      "pct_no_llega": 22.29
+      "total": 449608,
+      "no_shows": 88222,
+      "canceladas": 51125,
+      "pct_no_llega": 30.99
     },
     {
       "categoria": "Habitación Estándar",
-      "total": 1650248,
-      "no_shows": 166557,
-      "canceladas": 135475,
-      "pct_no_llega": 18.3
+      "total": 1649189,
+      "no_shows": 231779,
+      "canceladas": 187963,
+      "pct_no_llega": 25.45
     }
   ],
   "por_dia_semana": [
     {
       "dia_semana": "Friday",
-      "total": 426712,
-      "pct_no_llega": 32.94
+      "total": 427094,
+      "pct_no_llega": 45.84
     },
     {
       "dia_semana": "Monday",
-      "total": 430779,
-      "pct_no_llega": 30.74
-    },
-    {
-      "dia_semana": "Thursday",
-      "total": 429514,
-      "pct_no_llega": 19.76
+      "total": 430903,
+      "pct_no_llega": 42.73
     },
     {
       "dia_semana": "Sunday",
-      "total": 426583,
-      "pct_no_llega": 19.71
+      "total": 427281,
+      "pct_no_llega": 27.61
+    },
+    {
+      "dia_semana": "Thursday",
+      "total": 429539,
+      "pct_no_llega": 27.46
     },
     {
       "dia_semana": "Tuesday",
-      "total": 428948,
-      "pct_no_llega": 17.57
+      "total": 429792,
+      "pct_no_llega": 24.38
     },
     {
       "dia_semana": "Wednesday",
-      "total": 430127,
-      "pct_no_llega": 15.34
+      "total": 429457,
+      "pct_no_llega": 21.37
     },
     {
       "dia_semana": "Saturday",
-      "total": 427337,
-      "pct_no_llega": 13.12
+      "total": 425934,
+      "pct_no_llega": 18.27
     }
   ],
   "por_anticipacion": [
     {
       "franja_anticipacion": "mas de 10 dias",
-      "total": 604671,
-      "pct_no_llega": 25.68
+      "total": 604408,
+      "pct_no_llega": 35.69
     },
     {
       "franja_anticipacion": "menos de 6h",
-      "total": 374759,
-      "pct_no_llega": 23.41
-    },
-    {
-      "franja_anticipacion": "2 a 10 dias",
-      "total": 1065245,
-      "pct_no_llega": 19.64
+      "total": 375471,
+      "pct_no_llega": 32.6
     },
     {
       "franja_anticipacion": "6h a 48h",
-      "total": 955325,
-      "pct_no_llega": 19.58
+      "total": 953495,
+      "pct_no_llega": 27.34
+    },
+    {
+      "franja_anticipacion": "2 a 10 dias",
+      "total": 1066626,
+      "pct_no_llega": 27.33
     }
   ],
+  "por_mes": [
+    {
+      "anio_mes": "2024-01",
+      "total_estadias": 116322,
+      "no_llegaron": 25057,
+      "pct_no_llega": 21.54
+    },
+    {
+      "anio_mes": "2024-02",
+      "total_estadias": 106596,
+      "no_llegaron": 23774,
+      "pct_no_llega": 22.3
+    },
+    {
+      "anio_mes": "2024-03",
+      "total_estadias": 112958,
+      "no_llegaron": 25619,
+      "pct_no_llega": 22.68
+    },
+    {
+      "anio_mes": "2024-04",
+      "total_estadias": 107590,
+      "no_llegaron": 25038,
+      "pct_no_llega": 23.27
+    },
+    {
+      "anio_mes": "2024-05",
+      "total_estadias": 109149,
+      "no_llegaron": 25972,
+      "pct_no_llega": 23.79
+    },
+    {
+      "anio_mes": "2024-06",
+      "total_estadias": 103972,
+      "no_llegaron": 24921,
+      "pct_no_llega": 23.97
+    },
+    {
+      "anio_mes": "2024-07",
+      "total_estadias": 105045,
+      "no_llegaron": 26149,
+      "pct_no_llega": 24.89
+    },
+    {
+      "anio_mes": "2024-08",
+      "total_estadias": 103890,
+      "no_llegaron": 26390,
+      "pct_no_llega": 25.4
+    },
+    {
+      "anio_mes": "2024-09",
+      "total_estadias": 98513,
+      "no_llegaron": 25773,
+      "pct_no_llega": 26.16
+    },
+    {
+      "anio_mes": "2024-10",
+      "total_estadias": 99989,
+      "no_llegaron": 25853,
+      "pct_no_llega": 25.86
+    },
+    {
+      "anio_mes": "2024-11",
+      "total_estadias": 94500,
+      "no_llegaron": 25334,
+      "pct_no_llega": 26.81
+    },
+    {
+      "anio_mes": "2024-12",
+      "total_estadias": 96233,
+      "no_llegaron": 26637,
+      "pct_no_llega": 27.68
+    },
+    {
+      "anio_mes": "2025-01",
+      "total_estadias": 94736,
+      "no_llegaron": 26717,
+      "pct_no_llega": 28.2
+    },
+    {
+      "anio_mes": "2025-02",
+      "total_estadias": 83813,
+      "no_llegaron": 23717,
+      "pct_no_llega": 28.3
+    },
+    {
+      "anio_mes": "2025-03",
+      "total_estadias": 90783,
+      "no_llegaron": 26279,
+      "pct_no_llega": 28.95
+    },
+    {
+      "anio_mes": "2025-04",
+      "total_estadias": 86948,
+      "no_llegaron": 25464,
+      "pct_no_llega": 29.29
+    },
+    {
+      "anio_mes": "2025-05",
+      "total_estadias": 87743,
+      "no_llegaron": 26483,
+      "pct_no_llega": 30.18
+    },
+    {
+      "anio_mes": "2025-06",
+      "total_estadias": 82888,
+      "no_llegaron": 25728,
+      "pct_no_llega": 31.04
+    },
+    {
+      "anio_mes": "2025-07",
+      "total_estadias": 84175,
+      "no_llegaron": 25858,
+      "pct_no_llega": 30.72
+    },
+    {
+      "anio_mes": "2025-08",
+      "total_estadias": 82643,
+      "no_llegaron": 26425,
+      "pct_no_llega": 31.97
+    },
+    {
+      "anio_mes": "2025-09",
+      "total_estadias": 78253,
+      "no_llegaron": 25263,
+      "pct_no_llega": 32.28
+    },
+    {
+      "anio_mes": "2025-10",
+      "total_estadias": 78933,
+      "no_llegaron": 25990,
+      "pct_no_llega": 32.93
+    },
+    {
+      "anio_mes": "2025-11",
+      "total_estadias": 74298,
+      "no_llegaron": 24349,
+      "pct_no_llega": 32.77
+    },
+    {
+      "anio_mes": "2025-12",
+      "total_estadias": 75119,
+      "no_llegaron": 25393,
+      "pct_no_llega": 33.8
+    },
+    {
+      "anio_mes": "2026-01",
+      "total_estadias": 73052,
+      "no_llegaron": 25059,
+      "pct_no_llega": 34.3
+    },
+    {
+      "anio_mes": "2026-02",
+      "total_estadias": 64511,
+      "no_llegaron": 22375,
+      "pct_no_llega": 34.68
+    },
+    {
+      "anio_mes": "2026-03",
+      "total_estadias": 69347,
+      "no_llegaron": 24741,
+      "pct_no_llega": 35.68
+    },
+    {
+      "anio_mes": "2026-04",
+      "total_estadias": 65620,
+      "no_llegaron": 23064,
+      "pct_no_llega": 35.15
+    },
+    {
+      "anio_mes": "2026-05",
+      "total_estadias": 65828,
+      "no_llegaron": 24264,
+      "pct_no_llega": 36.86
+    },
+    {
+      "anio_mes": "2026-06",
+      "total_estadias": 61975,
+      "no_llegaron": 23378,
+      "pct_no_llega": 37.72
+    },
+    {
+      "anio_mes": "2026-07",
+      "total_estadias": 62661,
+      "no_llegaron": 23784,
+      "pct_no_llega": 37.96
+    },
+    {
+      "anio_mes": "2026-08",
+      "total_estadias": 60770,
+      "no_llegaron": 23241,
+      "pct_no_llega": 38.24
+    },
+    {
+      "anio_mes": "2026-09",
+      "total_estadias": 56882,
+      "no_llegaron": 21596,
+      "pct_no_llega": 37.97
+    },
+    {
+      "anio_mes": "2026-10",
+      "total_estadias": 56874,
+      "no_llegaron": 22246,
+      "pct_no_llega": 39.11
+    },
+    {
+      "anio_mes": "2026-11",
+      "total_estadias": 53409,
+      "no_llegaron": 21171,
+      "pct_no_llega": 39.64
+    },
+    {
+      "anio_mes": "2026-12",
+      "total_estadias": 53982,
+      "no_llegaron": 21138,
+      "pct_no_llega": 39.16
+    }
+  ],
+  "variacion_concurrencia_pct": -53.6,
   "benchmark_particiones": [
     {
       "particiones": 1,
-      "segundos": 1.214
+      "segundos": 1.203
     },
     {
       "particiones": 4,
-      "segundos": 1.712
+      "segundos": 1.618
     },
     {
       "particiones": 8,
-      "segundos": 0.953
+      "segundos": 1.024
     },
     {
       "particiones": 6,
-      "segundos": 0.711
+      "segundos": 0.944
     }
   ]
 }
